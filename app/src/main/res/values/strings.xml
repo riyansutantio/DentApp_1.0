@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">DentApp</string>
+    <string name="ums">Universitas Muhammadiyah Surakarta</string>
+    <string name="welcome">Welcome to DentApp</string>
+    <string name="welcomedesc">Selamat datang… Bagaimana keadaan gigi dan mulut mu?</string>
+    <string name="jddiagnosis">Mulai Diagnosis</string>
+    <string name="jdpenyakit">Daftar Penyakit</string>
+    <string name="jdgejala">Daftar Gejala</string>
+    <string name="jdpetunjuk">Petunjuk</string>
+    <string name="jdtentang">Tentang Aplikasi</string>
+    <string name="descdiagnosis">Memulai program diagnosis penyakit gigi dan mulut</string>
+    <string name="descpenyakit">Menampilkan daftar penyakit</string>
+    <string name="descgejala">Menampilkan daftar gejala penyakit</string>
+    <string name="descpetunjuk">Menampilkan petunjuk pemakaian aplikasi</string>
+    <string name="desctentang">Menampilkan informasi tentang aplikasi</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>
