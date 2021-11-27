@@ -1,43 +1,54 @@
 package com.example.dentapp.Util
 
-import android.os.Handler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.dentapp.Halaman.*
 import com.example.dentapp.WelcomeScreen
+import com.example.dentapp.google.GoogleUserModel
+import com.squareup.moshi.Moshi
 
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.LoginScreen.route){
-        composable(route = Screen.LoginScreen.route){
-            LoginScreen(navController = navController)
+    NavHost(navController = navController, startDestination = Screen.AuthScreen.route){
+        composable(route = Screen.AuthScreen.route){
+            AuthScreen(navController)
         }
-        composable(route = Screen.WelcomeScreen.route){
-            WelcomeScreen(navController = navController)
+        composable(route = Destinations.Home){ backStackEntry ->
+            val userJson = backStackEntry.arguments?.getString("user")
+
+            val moshi = Moshi.Builder().build()
+            val jsonAdapter = moshi.adapter(GoogleUserModel::class.java)
+            val userObject = jsonAdapter.fromJson(userJson!!)
+
+            WelcomeScreen(navController, userModel = userObject!!)
+        }
+        composable(route = Screen.LoginScreen.route){
+            LoginScreen(navController)
+        }
+        composable(route = Screen.SignUpScreen.route){
+            SignUpScreen(navController)
         }
         composable(route = Screen.DiagnosisScreen.route){
-            DiagnosisScreen(navController = navController)
+            DiagnosisScreen(navController)
         }
         composable(route = Screen.GejalaScreen.route){
-            GejalaScreen(navController = navController)
+            GejalaScreen(navController)
         }
         composable(route = Screen.PenyakitScreen.route){
-            PenyakitScreen(navController = navController)
+            PenyakitScreen(navController)
         }
         composable(route = Screen.PetunjukScreen.route){
-            PetunjukScreen(navController = navController)
+            PetunjukScreen(navController)
         }
         composable(route = Screen.TentangScreen.route){
-            TentangScreen(navController = navController)
+            TentangScreen(navController)
         }
     }
 }

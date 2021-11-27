@@ -1,5 +1,6 @@
 package com.example.dentapp
 
+import android.widget.Toast
 import  androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
@@ -21,11 +22,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -33,11 +32,12 @@ import com.example.dentapp.Util.Screen
 import com.example.dentapp.Util.featured
 import com.example.dentapp.Util.lists
 import com.example.dentapp.Util.standardQuadFromTo
+import com.example.dentapp.google.GoogleUserModel
 import com.example.dentapp.ui.*
 
 @ExperimentalFoundationApi
 @Composable
-fun WelcomeScreen(navController: NavController) {
+fun WelcomeScreen(navController: NavController, userModel: GoogleUserModel) {
     Box(
         modifier = Modifier
             .background(gradbg)
@@ -45,7 +45,7 @@ fun WelcomeScreen(navController: NavController) {
             .padding(start = 5.dp, end = 5.dp, bottom = 5.dp, top = 20.dp)
     ) {
         Column {
-            GreetingSection(navController)
+            GreetingSection(navController,userModel)
             MainMenu(navController)
             FeatureSection(
                 features = lists().menulist,navController)
@@ -54,7 +54,8 @@ fun WelcomeScreen(navController: NavController) {
 }
 
 @Composable
-fun GreetingSection(navController: NavController) {
+fun GreetingSection(navController: NavController,userModel: GoogleUserModel) {
+    val context = LocalContext.current
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -66,7 +67,7 @@ fun GreetingSection(navController: NavController) {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Welcome",
+                text = "Welcome ${userModel.name}",
                 style = MaterialTheme.typography.h3
             )
             Text(
@@ -78,6 +79,7 @@ fun GreetingSection(navController: NavController) {
             modifier = Modifier
                 .padding(5.dp),
             onClick = {
+                Toast.makeText(context, "Logout Berhasil", Toast.LENGTH_SHORT).show()
                 navController.navigate(Screen.LoginScreen.route){popUpTo(0)}
             }
         ) {

@@ -7,10 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,9 +22,10 @@ import androidx.navigation.NavController
 import com.example.dentapp.Util.Screen
 import com.example.dentapp.ui.YesButton
 import com.example.dentapp.ui.gradbg
+import java.util.EnumSet.range
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun SignUpScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .background(gradbg)
@@ -35,14 +33,13 @@ fun LoginScreen(navController: NavController) {
             .padding(20.dp)
     ){
         Column {
-            TitleLogin()
-            LoginForm(navController)
+            TitleSignup()
+            SignUpForm(navController)
         }
     }
 }
-
 @Composable
-fun TitleLogin() {
+fun TitleSignup() {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -51,16 +48,15 @@ fun TitleLogin() {
             .padding(top = 30.dp, start = 30.dp, end = 30.dp, bottom = 50.dp)
     ) {
         Text(
-            text = "Halaman Login",
+            text = "Halaman Sign Up",
             style = MaterialTheme.typography.h4,
             modifier = Modifier.padding(start = 10.dp,top = 10.dp,bottom = 30.dp)
         )
     }
 }
 
-
 @Composable
-fun LoginForm(navController: NavController) {
+fun SignUpForm(navController: NavController) {
     val context = LocalContext.current
     Column(
         verticalArrangement = Arrangement.Center,
@@ -69,43 +65,61 @@ fun LoginForm(navController: NavController) {
             .padding(horizontal = 15.dp,vertical = 20.dp)
 
     ) {
-        EmailTextField()
-        PassTextField()
+        NamaTextField()
+        EmailsTextField()
+        PasswTextField()
         Button(
             modifier = Modifier
                 .background(YesButton)
                 .fillMaxWidth(),
             onClick = {
-                Toast.makeText(context, "Login Berhasil", Toast.LENGTH_SHORT).show()//diubah buat login
+                Toast.makeText(context, "Sign Up Berhasil", Toast.LENGTH_SHORT).show()//diubah buat login
                 navController.navigate(Screen.WelcomeScreen.route){popUpTo(0)}
             }
         ) {
             Text(
-                text = "Login",
+                text = "Sign Up",
                 style = MaterialTheme.typography.subtitle1,
                 modifier = Modifier.padding(5.dp)
             )
         }
-        Text(
-            text = "Belum pernah mendaftar? Sign Up here",
-            modifier = Modifier
-                .clickable {
-                    navController.navigate(Screen.SignUpScreen.route)
-                }
-                .padding(10.dp),
-            textAlign = TextAlign.Center,
-            color = Color.Blue
-        )
     }
 }
+
 @Composable
-fun EmailTextField() {
+fun NamaTextField() {
+    var texts by remember { mutableStateOf("") }
+    val listNum:List<Int> = listOf(1,2,3,4,5,6,7,8,9,0)
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 10.dp).fillMaxWidth(),
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            OutlinedTextField(
+                value = texts,
+                onValueChange = { texts = it},
+                placeholder = {
+                    Text(text = "Input Nama Lengkap")
+                },
+                label = {
+                    Text("Nama Lengkap")
+                },
+                leadingIcon = { Icon(imageVector = Icons.Filled.Person, contentDescription = "iconNama" ) },
+            )
+        }
+    }
+}
+
+@Composable
+fun EmailsTextField() {
     var texts by remember { mutableStateOf("") }
     val invalidInput = texts.count() > 5 && '@' !in texts
     Box(
         modifier = Modifier
-            .padding(horizontal = 10.dp)
-            .fillMaxWidth(),
+            .padding(horizontal = 10.dp).fillMaxWidth(),
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -140,41 +154,14 @@ fun EmailTextField() {
     }
 }
 
-fun labelEmail(texts:String ,invalidInput:Boolean): String {
-    var labelEmail = ""
-    if (texts == ""){
-        labelEmail = "Email"
-    }else{
-        if (invalidInput){
-            labelEmail = "Email*"
-        }else{
-            labelEmail="Email"
-        }
-    }
-    return labelEmail
-}
-fun labelPass(texts:String ,invalidInput:Boolean): String {
-    var labelPass = ""
-    if (texts == "") {
-        labelPass = "Password"
-    } else {
-        if (invalidInput) {
-            labelPass = "Password*"
-        } else {
-            labelPass = "Password"
-        }
-    }
-    return labelPass
-}
 @Composable
-fun PassTextField() {
+fun PasswTextField() {
     var pass by remember { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
     val invalidInput = pass.count() < 8
     Box(
         modifier = Modifier
-            .padding(horizontal = 10.dp, vertical = 10.dp)
-            .fillMaxWidth(),
+            .padding(horizontal = 10.dp,vertical = 10.dp).fillMaxWidth(),
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),

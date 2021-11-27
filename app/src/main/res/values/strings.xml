@@ -1,4 +1,5 @@
 <resources>
+    <string name="google_cloud_server_client_id" translatable="false">508877691775-p6jps0kact6hbur597brm1e8tgl58mss.apps.googleusercontent.com</string>
     <string name="app_name">DentApp</string>
     <string name="ums">Universitas Muhammadiyah Surakarta</string>
     <string name="welcome">Welcome to DentApp</string>
