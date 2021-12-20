@@ -6,20 +6,23 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.dentapp.Util.listgejala
-import com.example.dentapp.Util.listpetunjuk
+import com.example.dentapp.Util.Screen
+import com.example.dentapp.Model.listgejala
 import com.example.dentapp.Util.lists
 import com.example.dentapp.ui.DaftarColor
 import com.example.dentapp.ui.gradbg
@@ -32,7 +35,7 @@ fun GejalaScreen(navController: NavController) = Box(
         .fillMaxSize()
 ) {
     Column {
-        GejalaTitle()
+        GejalaTitle(navController)
         GejalaSection(
             gejala = lists().gejalalist
         )
@@ -40,7 +43,7 @@ fun GejalaScreen(navController: NavController) = Box(
 }
 
 @Composable
-fun GejalaTitle() {
+fun GejalaTitle(navController: NavController) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -48,11 +51,19 @@ fun GejalaTitle() {
             .fillMaxWidth()
             .padding(top = 50.dp)
     ) {
-        Text(
-            text = "Daftar Gejala",
-            style = MaterialTheme.typography.h3,
-            modifier = Modifier.padding(start = 10.dp, top = 10.dp, bottom = 10.dp)
-        )
+        Row() {
+            IconButton(
+                modifier = Modifier.weight(1f),
+                onClick = { navController.navigate(Screen.WelcomeScreen.route){popUpTo(0)} }
+            ) {
+                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "ArrowBack")
+            }
+            Text(
+                text = "Daftar Gejala",
+                style = MaterialTheme.typography.h4,
+                modifier = Modifier.padding(bottom = 30.dp).weight(3f)
+            )
+        }
     }
 }
 

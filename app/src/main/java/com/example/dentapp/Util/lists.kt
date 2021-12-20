@@ -1,5 +1,6 @@
 package com.example.dentapp.Util
 
+import com.example.dentapp.Model.*
 import com.example.dentapp.R
 import com.example.dentapp.ui.*
 
@@ -8,7 +9,7 @@ class lists {
         listpenyakit(
             id = "P01",
             namaPenyakit = "Karies Gigi",
-            deskripsi = "Proses remineralisasi dan demineraslisasi mineral-mineral penyusun "+
+            deskripsi = "Sering disebut dengan gigi berlubang merupakan Proses remineralisasi dan demineraslisasi mineral-mineral penyusun "+
                     "gigi serta ketidakseimbangan antara penyusunan dan pembuangan mineral gigi.",
             gejala = "G01 - Sakit gigi \n" +
                     "G02 - Gigi terasa ngilu \n" +
@@ -25,7 +26,7 @@ class lists {
             deskripsi = "Pengerasan sisa makanan dan bakteri yang tersisa/menempel pada permukaan gigi.",
             gejala = "G04 - Gigi terasa kotor  \n" +
                     "G05 - Berdarah ketika menyikat gigi",
-            penyebab = "Cara gosok gigi yang tidak tepat.",
+            penyebab = "Cara dan frekuensi gosok gigi yang tidak tepat.",
             penanganan = "Tidak ada penanganan pertama oleh pasien. Karang gigi tidak boleh dicongkel-congkel "+
                     "sendiri serta tidak boleh membeli obat-obatan kimia yang tidak disarankan dokter gigi.",
             pencegahan = "Menggosokgigi dengan frekuensi dan teknik yang tepat.",
@@ -72,15 +73,15 @@ class lists {
         ),
         listpenyakit(
             id = "P06",
-            namaPenyakit = "Abses Apikal",
+            namaPenyakit = "Abses Periapikal",
             deskripsi = "Disebabkan oleh bakteri karies yang menginfeksi sampai ke saraf gigi (pasti disertai dengan gigi berlubang).",
             gejala = "G10 - Gigi terasa ngilu saat mengunyah\n" +
                     "G13 - Sakit yang terlokalisir (spesifik ke tempat tertentu)\n"+
                     "G14 - Gigi terasa pegal \n" +
                     "G15 - Gigi terasa sakit walaupun sudah ditambal",
-            penyebab = "meminum obat penahan nyeri.",
+            penyebab = "Penyakit disebabkan oleh infeksi bakteri serta kesalahan dalam teknik dan frekuensi menggosok gigi yang baik dan benar .",
             penanganan = "meminum obat penahan nyeri.",
-            pencegahan = "Menggosokgigi dengan frekuensi dan teknik yang tepat.",
+            pencegahan = "Menggosok gigi dengan frekuensi dan teknik yang tepat.",
             perawatan = "Scaling dan root Planning (Pembersihan karang gigi) serta pemberian obat-obatan."
         ),
         listpenyakit(
@@ -99,7 +100,7 @@ class lists {
         listpenyakit(
             id = "P08",
             namaPenyakit = "Abrasi Gigi",
-            deskripsi = "Terkikirnya bagian gigi yang berdekatan dengan gusi.",
+            deskripsi = "Terkikisnya bagian gigi yang berdekatan dengan gusi.",
             gejala = "G19 - Gigi terasa ngilu saat minum-minuman panas/dingin" ,
             penyebab = "Cara menggosok gigi yang salah/terlalu keras sehingga terkikisnya gigi.",
             penanganan = "Mengubah cara dan frekuensi menggosok gigi.",
@@ -237,7 +238,7 @@ class lists {
         listpetunjuk(
             id = "Pt01",
             namapetunjuk = "Diagnosis",
-            descpetunjuk = "Menu Diagnosis pada halaman utama berfungsi untuk memulai diagnosa. Anda diminta untuk menjawab beebrapa pertanyaan yang akan ditampilkan hanya dengan tombol 'Ya' atau 'Tidak'. Kemudian sistem akan mengolah dan menampilkan hasil perkiraan diagnosis dari jawaban anda. ",
+            descpetunjuk = "Menu Diagnosis pada halaman utama berfungsi untuk memulai diagnosa. Anda diminta untuk menjawab beebrapa pertanyaan yang akan ditampilkan hanya dengan tombol 'Ya' atau 'Tidak'. Kemudian sistem akan mengolah dan menampilkan hasil perkiraan diagnosis dari jawaban anda. Serta Hasil dari diagnosis anda akan direkam dan data pribadi anda akan dirahasiakan untuk tujuan penelitian",
             iconId = R.mipmap.ic_diagnosis
         ),
         listpetunjuk(
@@ -299,7 +300,7 @@ class lists {
         ),
         listpertayaan(
             idpertanyaan = "Q02",
-            soal = "Apakah gigi anda terasa ngilu yang menyebar?",
+            soal = "Apakah gigi anda terasa ngilu yang menyebar dan/atau gigi terasa goyah?",
             jawaban1 = "Q03",
             jawaban0 = "Q04"
         ),
@@ -311,10 +312,10 @@ class lists {
         ),
         listpertayaan(
             idpertanyaan = "Q04",
-            soal = "Apakah anda merasakan rasa sakit yang terlokalisisr/terpusat dan " +
-                    "merasakan pegal pada gigi?",
-            jawaban1 = "Penyakit Abses Apikal",
-            jawaban0 = "Penyakit Periodontitis atau Abses Periodontal atau Abses Apikal"
+            soal = "Apakah anda merasakan rasa sakit yang terpusat dan " +
+                    "merasakan pegal pada gigi walaupun gigi sudah pernah ditambal?",
+            jawaban1 = "Penyakit Abses Periapikal",
+            jawaban0 = "Penyakit Periodontitis atau Abses Periodontal atau Abses Peripikal"
         ),
         listpertayaan(
             idpertanyaan = "Q05",
@@ -349,14 +350,14 @@ class lists {
         listpertayaan(
             idpertanyaan = "Q10",
             soal = "Apakah anda mengalami sariawan terus menerus dan muncul benjolan di " +
-                    "daerah mulut?",
+                    "daerah mulut serta berat badan menurun?",
             jawaban1 = "Penyakit Kanker Mulut",
             jawaban0 = "Q11"
         ),
         listpertayaan(
             idpertanyaan = "Q11",
             soal = "Apakah anda merasakan rasa sakit yang tajam pada gigi belakang/sampai " +
-                    "telinga dan mengalami migrain?",
+                    "telinga saat umur diantara 18-25 tahun dan mengalami migrain?",
             jawaban1 = "Penyakit Gangguan Gigi Bungsu",
             jawaban0 = "Q12"
         ),
@@ -366,5 +367,19 @@ class lists {
             jawaban1 = "Penyakit Abrasi Gigi",
             jawaban0 = "SEHAT"
         )
+    )
+    val tentangList: List<listTentang> = listOf(
+        listTentang(
+            iconId = R.mipmap.logoapp,
+            appname = "DentApp",
+            desc1 = "Aplikasi ini digunakan untuk memberikan pencerdasan kepada masyarakat tentang pentingnya kesehatan gigi dan mulut dengan memberikan informasi penyakit, gejala, dan informasi detail penyakit serta memiliki fungsi utama sebagai alat mendiagnosa kemungkinan penyakit gigi dan mulut.\n"+
+                    "\nPerlu diketahui bahwa sumber pengetahuan mengenai penyakit gigi dan mulut didapatkan dari proses wawancara dengan dokter gigi.",
+            desc2 ="PERHATIAN!!",
+            desc3 = "Fungsi diagnosa penyakit gigi dan mulut pada aplikasi ini tidak 100% akurat. Namun, terdapat usaha dalam pengembangan aplikasi ini dapat berffungsi semaksimal mungkin dalam memberikan informasi, mohon digunakan dengan bijak.\n"+
+                    "\nPihak pengembang mempersilahkan pengguna untuk memberi saran dan kritikan melalui kontra email pengembang. mohon maaf yang sebesar-besarnya bila terdapat tutur kata yang kurang baik dalam aplikasi ini.",
+            desc4 = "Terimakasih, \n" +
+                    "Pengembang.\n\n"+"Riyan Sutantio Bangkit Nugroho\n" +
+                    "Riyantio84@gmail.com",
+            )
     )
 }

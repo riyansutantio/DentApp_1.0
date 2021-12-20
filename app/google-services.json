@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "508877691775",
+    "firebase_url": "https://dentapp-91e18-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "dentapp-91e18",
+    "storage_bucket": "dentapp-91e18.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:508877691775:android:d02712b3cbbe9972c3d84a",
+        "android_client_info": {
+          "package_name": "com.example.dentapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "508877691775-14itnllnh3ggm64kmft71lv1u0ud7hgb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSD9Ae96mlN1u2hIhVwinlG2b6dYrJBpQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "508877691775-14itnllnh3ggm64kmft71lv1u0ud7hgb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

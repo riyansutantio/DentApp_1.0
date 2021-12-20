@@ -1,39 +1,37 @@
 package com.example.dentapp.Util
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.dentapp.Halaman.*
+import com.example.dentapp.Model.AuthViewModel
 import com.example.dentapp.WelcomeScreen
-import com.example.dentapp.google.GoogleUserModel
-import com.squareup.moshi.Moshi
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
 fun Navigation() {
+    val context = LocalContext.current
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.AuthScreen.route){
+    val savedEmail = SavedPreference.getEmail(context).toString()
+    val loginHandler = if (savedEmail == "DefaultEmail" || savedEmail == "") Screen.AuthScreen.route else Screen.WelcomeScreen.route
+    NavHost(
+        navController = navController,
+        startDestination = loginHandler
+    ){
+        composable(route = Screen.WelcomeScreen.route){
+            WelcomeScreen(navController)
+        }
         composable(route = Screen.AuthScreen.route){
-            AuthScreen(navController)
-        }
-        composable(route = Destinations.Home){ backStackEntry ->
-            val userJson = backStackEntry.arguments?.getString("user")
-
-            val moshi = Moshi.Builder().build()
-            val jsonAdapter = moshi.adapter(GoogleUserModel::class.java)
-            val userObject = jsonAdapter.fromJson(userJson!!)
-
-            WelcomeScreen(navController, userModel = userObject!!)
-        }
-        composable(route = Screen.LoginScreen.route){
-            LoginScreen(navController)
-        }
-        composable(route = Screen.SignUpScreen.route){
-            SignUpScreen(navController)
+            AuthScreen(authViewModel = AuthViewModel(),navController)
         }
         composable(route = Screen.DiagnosisScreen.route){
             DiagnosisScreen(navController)

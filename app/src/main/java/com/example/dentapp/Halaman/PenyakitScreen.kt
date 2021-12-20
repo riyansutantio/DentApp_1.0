@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -26,7 +27,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.dentapp.Util.listpenyakit
+import com.example.dentapp.Util.Screen
+import com.example.dentapp.Model.listpenyakit
 import com.example.dentapp.Util.lists
 import com.example.dentapp.ui.DaftarColor
 import com.example.dentapp.ui.gradbg
@@ -41,7 +43,7 @@ fun PenyakitScreen(navController: NavController) {
             .fillMaxSize()
     ) {
         Column {
-            PenyakitTitle()
+            PenyakitTitle(navController)
             PenyakitSection(
                 penyakit = lists().penyakitllist
             )
@@ -49,7 +51,7 @@ fun PenyakitScreen(navController: NavController) {
     }
 }
 @Composable
-fun PenyakitTitle() {
+fun PenyakitTitle(navController: NavController) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -57,11 +59,19 @@ fun PenyakitTitle() {
             .fillMaxWidth()
             .padding(top = 50.dp)
     ) {
-        Text(
-            text = "Daftar Penyakit",
-            style = MaterialTheme.typography.h3,
-            modifier = Modifier.padding(start = 10.dp,top = 10.dp,bottom = 20.dp)
-        )
+        Row() {
+            IconButton(
+                modifier = Modifier.weight(1f),
+                onClick = { navController.navigate(Screen.WelcomeScreen.route){popUpTo(0)} }
+            ) {
+                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "ArrowBack")
+            }
+            Text(
+                text = "Daftar Penyakit",
+                style = MaterialTheme.typography.h4,
+                modifier = Modifier.padding(bottom = 30.dp).weight(3f)
+            )
+        }
     }
 }
 
@@ -72,7 +82,7 @@ fun PenyakitSection(penyakit: List<listpenyakit>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp)
+            .padding(5.dp)
     ) {
         LazyVerticalGrid(
             cells = GridCells.Fixed(1),
@@ -91,6 +101,7 @@ fun PenyakitSection(penyakit: List<listpenyakit>) {
 @Composable
 fun Penyakititems(item: listpenyakit) {
     var expandableState by remember { mutableStateOf(false) }
+    var lines = 1
     val rotation by animateFloatAsState(
         targetValue =
         if (expandableState) 180f
@@ -98,13 +109,12 @@ fun Penyakititems(item: listpenyakit) {
     )
     BoxWithConstraints(
         modifier = Modifier
-            .padding(7.5.dp)
-            .clip(RoundedCornerShape(10.dp))
+            .padding(5.dp)
     ) {
         Card(
             modifier = Modifier
                 .fillMaxSize()
-                .background(DaftarColor)
+                .clip(RoundedCornerShape(10.dp))
                 .animateContentSize(
                     animationSpec = tween(
                         durationMillis = 300,
@@ -115,84 +125,94 @@ fun Penyakititems(item: listpenyakit) {
                 expandableState = !expandableState
             }
         ){
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(5.dp)
+            Surface(
+                modifier = Modifier.background(DaftarColor).fillMaxSize()
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    Text(
-                        text = item.id + " - " + item.namaPenyakit,
-                        fontSize = 25.sp,
-                        color = Color.White,
-                        textAlign = TextAlign.Left,
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .background(DaftarColor)
-                            .padding(5.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .weight(6f)
-                    )
-                    Button(
-                        modifier = Modifier
-                            .weight(1f)
-                            .rotate(rotation),
-                        onClick = {expandableState = !expandableState}) {
-                        Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "arrow")
+                            .fillMaxWidth()
+                            .fillMaxHeight()
+                    ) {
+                        Text(
+                            text = item.id + " - " + item.namaPenyakit,
+                            fontSize = 25.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Left,
+                            maxLines = lines,
+                            modifier = Modifier
+                                .background(DaftarColor)
+                                .padding(5.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                                .weight(6f)
+                        )
+                        Button(
+                            modifier = Modifier
+                                .weight(1f)
+                                .rotate(rotation),
+                            onClick = {expandableState = !expandableState}) {
+                            Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "arrow")
+                        }
                     }
-                }
-                if(expandableState){
-                    Text(
-                        text = "\nDeskripsi :",
-                        fontSize = 25.sp
-                    )
-                    Text(
-                        text = item.deskripsi,
-                        fontSize = 20.sp
-                    )
-                    Text(
-                        text = "\nGejala :",
-                        fontSize = 25.sp
-                    )
-                    Text(
-                        text = item.gejala,
-                        fontSize = 20.sp
-                    )
-                    Text(
-                        text = "\nPenyebab Penyakit :",
-                        fontSize = 25.sp
-                    )
-                    Text(
-                        text = item.penyebab,
-                        fontSize = 20.sp
-                    )
-                    Text(
-                        text = "\nPenanganan Pertama Oleh Pasien :",
-                        fontSize = 25.sp
-                    )
-                    Text(
-                        text = item.penanganan,
-                        fontSize = 20.sp
-                    )
-                    Text(
-                        text = "\nLangkah Pencegahan :",
-                        fontSize = 25.sp
-                    )
-                    Text(
-                        text = item.pencegahan,
-                        fontSize = 20.sp
-                    )
-                    Text(
-                        text = "\nPerawatan Oleh Dokter :",
-                        fontSize = 25.sp
-                    )
-                    Text(
-                        text =  item.perawatan,
-                        fontSize = 20.sp
-                    )
+                    if(expandableState){
+                        lines = 2
+                        Column(
+                            modifier = Modifier.padding(5.dp)
+                        ) {
+                            Text(
+                                text = "\nDeskripsi :",
+                                fontSize = 25.sp
+                            )
+                            Text(
+                                text = item.deskripsi,
+                                fontSize = 20.sp
+                            )
+                            Text(
+                                text = "\nGejala :",
+                                fontSize = 25.sp
+                            )
+                            Text(
+                                text = item.gejala,
+                                fontSize = 20.sp
+                            )
+                            Text(
+                                text = "\nPenyebab Penyakit :",
+                                fontSize = 25.sp
+                            )
+                            Text(
+                                text = item.penyebab,
+                                fontSize = 20.sp
+                            )
+                            Text(
+                                text = "\nPenanganan Pertama Oleh Pasien :",
+                                fontSize = 25.sp
+                            )
+                            Text(
+                                text = item.penanganan,
+                                fontSize = 20.sp
+                            )
+                            Text(
+                                text = "\nLangkah Pencegahan :",
+                                fontSize = 25.sp
+                            )
+                            Text(
+                                text = item.pencegahan,
+                                fontSize = 20.sp
+                            )
+                            Text(
+                                text = "\nPerawatan Oleh Dokter :",
+                                fontSize = 25.sp
+                            )
+                            Text(
+                                text =  item.perawatan,
+                                fontSize = 20.sp
+                            )
+                        }
+                    }
                 }
             }
         }

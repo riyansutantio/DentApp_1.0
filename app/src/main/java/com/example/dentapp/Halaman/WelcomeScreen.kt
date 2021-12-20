@@ -4,18 +4,12 @@ import android.widget.Toast
 import  androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,27 +19,31 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.dentapp.Util.Screen
-import com.example.dentapp.Util.featured
-import com.example.dentapp.Util.lists
-import com.example.dentapp.Util.standardQuadFromTo
-import com.example.dentapp.google.GoogleUserModel
+import androidx.navigation.compose.rememberNavController
+import com.example.dentapp.Util.*
 import com.example.dentapp.ui.*
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
+
+@ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
-fun WelcomeScreen(navController: NavController, userModel: GoogleUserModel) {
+fun WelcomeScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .background(gradbg)
-            .fillMaxSize()
-            .padding(start = 5.dp, end = 5.dp, bottom = 5.dp, top = 20.dp)
+            .padding(start = 5.dp, end = 5.dp, top = 5.dp)
     ) {
         Column {
-            GreetingSection(navController,userModel)
+            LogoutButton(navController)
+            GreetingSection()
             MainMenu(navController)
             FeatureSection(
                 features = lists().menulist,navController)
@@ -54,74 +52,108 @@ fun WelcomeScreen(navController: NavController, userModel: GoogleUserModel) {
 }
 
 @Composable
-fun GreetingSection(navController: NavController,userModel: GoogleUserModel) {
-    val context = LocalContext.current
+fun LogoutButton(navController: NavController) {
     Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 12.dp, top = 20.dp, bottom = 15.dp)
+        horizontalArrangement = Arrangement.End
     ) {
-        Column(
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "Welcome ${userModel.name}",
-                style = MaterialTheme.typography.h3
-            )
-            Text(
-                text = "To DentApp",
-                style = MaterialTheme.typography.h6
-            )
-        }
+        Text(text = "", modifier = Modifier.weight(3f))
+        PopUpLogout(navController)
+    }
+}
+
+@Composable
+fun PopUpLogout(navController: NavController) {
+    val context = LocalContext.current
+    var dialogState by remember { mutableStateOf(false) }
+    Column(
+    ) {
         Button(
             modifier = Modifier
                 .padding(5.dp),
             onClick = {
-                Toast.makeText(context, "Logout Berhasil", Toast.LENGTH_SHORT).show()
-                navController.navigate(Screen.LoginScreen.route){popUpTo(0)}
-            }
+                dialogState = true
+            },
+            colors = ButtonDefaults.buttonColors(YesButton)
         ) {
-            Text(text = "Logout")
+            Text(text = "Logout",color = Color.White)
+        }
+        if (dialogState) {
+            AlertDialog(
+                modifier = Modifier.clip(RoundedCornerShape(15.dp)),
+                title = {},
+                onDismissRequest = {
+                    dialogState = false
+                },
+                text = {
+                    Text(
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center,
+                        text = "Apakah anda yakin untuk Log Out?"
+                    )
+                },
+                confirmButton = {
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(NoButton),
+                        onClick = {
+                            getGoogleSignInClient(context).signOut().addOnCompleteListener{
+                                Toast.makeText(context, "Logout Berhasil", Toast.LENGTH_SHORT).show()
+                                SavedPreference.setDefaultEmail(context)
+                                SavedPreference.setDefaultName(context)
+                                navController.navigate(Screen.AuthScreen.route){popUpTo(0)}
+                            }
+                        }) {
+                        Text(fontSize = 15.sp, text = "Ya",color = Color.White,)
+                    }
+                },
+                dismissButton = {
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(YesButton),
+                        onClick = {
+                            dialogState = false
+                        }) {
+                        Text(fontSize = 15.sp, text = "Tidak",color = Color.White,)
+                    }
+                }
+            )
         }
     }
 }
-
+@ExperimentalMaterialApi
 @Composable
-fun ChipSection(chips: List<String>) {
-    var selectedChipIndex by remember {
-        mutableStateOf(0)
+fun GreetingSection() {
+    val context = LocalContext.current
+    val name = SavedPreference.getDisplayName(context).toString()
+    Column(
+        modifier = Modifier.padding(start = 10.dp, bottom = 10.dp)
+    ) {
+        Text(
+            text = "Welcome",
+            style = MaterialTheme.typography.h3
+        )
+        Text(
+            text = "To DentApp, ",
+            style = MaterialTheme.typography.h6
+        )
+        Text(
+            text = name,
+            style = MaterialTheme.typography.h6
+        )
     }
-    LazyRow {
-        items(chips.size){
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .padding(start = 15.dp, top = 15.dp, bottom = 15.dp)
-                    .clickable {
-                        selectedChipIndex = it
-                    }
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(
-                        if (selectedChipIndex == it) ButtonBlue
-                        else DarkerButtonBlue
-                    )
-                    .padding(15.dp)
-            ){
-                Text(text = chips[it], color = TextWhite)
-            }
-        }
-    }
+
 }
 
 @Composable
 fun MainMenu(navController: NavController) {
-    Surface(
-        elevation = 10.dp,
+    Column(
         modifier = Modifier
-            .padding(15.dp)
-            .clip(RoundedCornerShape(10.dp))
+            .padding(start = 15.dp, end = 15.dp, top = 15.dp)
+            .fillMaxWidth()
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -147,15 +179,14 @@ fun MainMenu(navController: NavController) {
                     color = TextWhite
                 )
             }
-            Button(
-                onClick =  {
+            Image(
+                painter = painterResource(id = R.mipmap.ic_diagnosis),
+                contentDescription ="Menu Gejala",
+                modifier = Modifier.clickable {
                     navController.navigate(Screen.DiagnosisScreen.route)
-                },
-                modifier = Modifier
-                    .padding(10.dp)
-            ){
-                Image(painter = painterResource(id = R.mipmap.ic_diagnosis), contentDescription ="Menu Gejala" )
-            }
+                }
+            )
+
         }
     }
 }
@@ -165,7 +196,7 @@ fun MainMenu(navController: NavController) {
 fun FeatureSection(features: List<featured>,navController: NavController) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = "Featured",
+            text = "Features",
             style = MaterialTheme.typography.h3,
             modifier = Modifier.padding(15.dp)
         )
@@ -248,7 +279,7 @@ fun FeaturedItems(feature: featured,navController: NavController) {
         ) {
             Text(
                 text = feature.title,
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.h5,
                 lineHeight = 25.sp,
                 modifier = Modifier.align(Alignment.TopStart)
             )
@@ -257,7 +288,25 @@ fun FeaturedItems(feature: featured,navController: NavController) {
                 contentDescription = feature.title,
                 modifier = Modifier.align(Alignment.BottomStart)
             )
-            Text(
+            Icon(
+                imageVector = Icons.Filled.ArrowForward,
+                contentDescription = "arrow",
+                modifier = Modifier
+                    .clickable {
+                        when (feature.id) {
+                            "DG" -> navController.navigate(Screen.GejalaScreen.route)
+                            "DP" -> navController.navigate(Screen.PenyakitScreen.route)
+                            "P" -> navController.navigate(Screen.PetunjukScreen.route)
+                            "T" -> navController.navigate(Screen.TentangScreen.route)
+                        }
+                    }
+                    .align(Alignment.BottomEnd)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(ButtonBlue)
+                    .padding(vertical = 5.dp, horizontal = 10.dp),
+                tint = Color.White
+            )
+            /*Text(
                 text = "Start",
                 color = Color.White,
                 fontSize = 25.sp,
@@ -275,7 +324,7 @@ fun FeaturedItems(feature: featured,navController: NavController) {
                     .clip(RoundedCornerShape(10.dp))
                     .background(ButtonBlue)
                     .padding(vertical = 5.dp, horizontal = 10.dp)
-            )
+            )*/
         }
     }
 }
